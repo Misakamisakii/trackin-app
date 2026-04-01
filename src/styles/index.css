@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-sage-50 text-deepblack font-sans antialiased overflow-x-hidden;
+  }
+}
+
+.text-shadow-glow {
+  text-shadow: 0 10px 30px rgba(10, 10, 10, 0.15), 0 4px 10px rgba(10, 10, 10, 0.1);
+}
+
+/* Fluid Animation for Notes */
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); opacity: 0; }
+  20% { opacity: 0.8; }
+  80% { opacity: 0.8; }
+  100% { transform: translateY(-100px) rotate(20deg); opacity: 0; }
+}
+
+.animate-float-1 { animation: float 6s ease-in-out infinite; }
+.animate-float-2 { animation: float 8s ease-in-out infinite 1s; }
+.animate-float-3 { animation: float 7s ease-in-out infinite 2s; }
+.animate-float-4 { animation: float 9s ease-in-out infinite 0.5s; }
+.animate-float-5 { animation: float 6.5s ease-in-out infinite 3s; }
