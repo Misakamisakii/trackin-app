@@ -1,8 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Project, ProjectCategory } from '@/types';
-import { Disc3, Plus, Calendar, Music2, Trash2, ImagePlus, X, Edit2, Loader2 } from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { Disc3, Plus, Music2, Trash2, ImagePlus, X, Edit2, Loader2 } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
 interface ProjectListProps {

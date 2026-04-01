@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Track, TrackStatus, Project } from '@/types';
 import { TrackList } from '@/components/dashboard/TrackList';
 import { ProductionBoard } from '@/components/dashboard/ProductionBoard';
-import { Disc3, ListMusic, Columns3, UserCircle, Settings, ArrowLeft, Info, Loader2 } from 'lucide-react';
+import { Disc3, ListMusic, Columns3, UserCircle, Settings, Info, Loader2 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { supabase } from '@/lib/supabase';
 

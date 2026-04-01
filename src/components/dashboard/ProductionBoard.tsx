@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Track, TrackStatus } from '@/types';
-import { Disc3, CheckCircle2, Clock, PlayCircle, GripVertical } from 'lucide-react';
+import { CheckCircle2, Clock, GripVertical } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import {
   DndContext,

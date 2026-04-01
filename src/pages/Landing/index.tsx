@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { Music, Play, Disc3, Mic2, Radio } from 'lucide-react';
 

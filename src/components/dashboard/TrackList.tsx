@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Track } from '@/types';
-import { ChevronDown, ChevronUp, Music, Mic2, FileAudio, Disc3, Settings2, Trash2, GripVertical } from 'lucide-react';
+import { ChevronDown, ChevronUp, Mic2, FileAudio, Disc3, Settings2, Trash2, GripVertical } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import {
   DndContext,

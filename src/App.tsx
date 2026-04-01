@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Landing } from '@/pages/Landing';
 import { ProjectList } from '@/pages/ProjectList';
 import { Dashboard as ProjectView } from '@/pages/Dashboard';
@@ -16,7 +16,7 @@ export const App = () => {
   }, []);
 
   const fetchProjects = async () => {
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from('projects')
       .select('*')
       .order('created_at', { ascending: false });
@@ -36,7 +36,7 @@ export const App = () => {
   };
 
   const handleAddProject = async (projectData: Omit<Project, 'id' | 'tracks'>) => {
-    const { data, error } = await supabase.from('projects').insert({
+    const { data } = await supabase.from('projects').insert({
       title: projectData.title,
       artist: projectData.artist,
       category: projectData.category,
