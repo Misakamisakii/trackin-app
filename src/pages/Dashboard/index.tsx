@@ -38,7 +38,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ project, onBack, onUpdateP
       setIsLoadingTracks(true);
       const { data, error } = await supabase
         .from('tracks')
-        .select('*')
+        .select(`
+          *,
+          versions:track_versions(*)
+        `)
         .eq('project_id', project.id)
         .order('order', { ascending: true });
         
@@ -53,7 +56,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ project, onBack, onUpdateP
           bpm: t.bpm || '',
           genre: t.genre || '',
           status: t.status,
-          order: t.order
+          order: t.order,
+          versions: t.versions || []
         })));
       } else if (error) {
         console.error("Error fetching tracks:", error);
@@ -65,7 +69,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ project, onBack, onUpdateP
   }, [project.id]);
 
   const handleUpdateTrack = async (id: string, updates: Partial<Track>) => {
-    // Optimistic update
+    // 如果更新的是版本信息，需要特殊处理
+    if (updates.versions !== undefined) {
+      setTracks(prev => prev.map(t => t.id === id ? { ...t, versions: updates.versions || [] } : t));
+      return;
+    }
+
+    // 其他字段的更新
     setTracks(prev => prev.map(t => t.id === id ? { ...t, ...updates } : t));
     
     // Map to snake_case for DB
@@ -122,7 +132,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ project, onBack, onUpdateP
         bpm: data.bpm || '',
         genre: data.genre || '',
         status: data.status,
-        order: data.order
+        order: data.order,
+        versions: []
       };
       setTracks(prev => [...prev, newTrack]);
     } else if (error) {

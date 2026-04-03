@@ -20,6 +20,7 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { VersionTree } from './VersionTree';
 
 interface TrackListProps {
   tracks: Track[];
@@ -222,6 +223,15 @@ const SortableTrackItem: React.FC<SortableTrackItemProps> = ({
                     placeholder="120"
                   />
                 </div>
+              </div>
+
+              {/* 版本管理区域 */}
+              <div className="md:col-span-2">
+                <VersionTree 
+                  trackId={track.id}
+                  versions={track.versions || []}
+                  onUpdateVersions={(versions) => onUpdateTrack(track.id, { versions })}
+                />
               </div>
 
             </div>
