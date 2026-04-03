@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Music, FileAudio, Trash2 } from 'lucide-react';
 import { cn } from '@/utils/cn';
@@ -19,7 +19,33 @@ export const VersionTree: React.FC<VersionTreeProps> = ({
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
+  // Check if database tables exist
+  useEffect(() => {
+    const checkDatabase = async () => {
+      try {
+        const { error } = await supabase
+          .from('track_versions')
+          .select('*')
+          .limit(1);
+        
+        if (error) {
+          console.error('Database check failed:', error);
+          alert('数据库连接失败，请检查 track_versions 表是否存在');
+        } else {
+          console.log('Database check successful');
+        }
+      } catch (err) {
+        console.error('Database check exception:', err);
+      }
+    };
+    
+    checkDatabase();
+  }, []);
+
   const addVersion = async () => {
+    console.log('Adding new version for track:', trackId);
+    console.log('Current versions:', versions);
+    
     const newVersion: Omit<TrackVersion, 'id' | 'created_at'> = {
       track_id: trackId,
       name: `V${versions.length + 1}`,
@@ -30,14 +56,24 @@ export const VersionTree: React.FC<VersionTreeProps> = ({
     // 将之前的最新版本标记为非最新
     const updatedVersions = versions.map(v => ({ ...v, is_latest: false }));
     
-    const { data } = await supabase
-      .from('track_versions')
-      .insert(newVersion)
-      .select()
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from('track_versions')
+        .insert(newVersion)
+        .select()
+        .single();
 
-    if (data) {
-      onUpdateVersions([...updatedVersions, data]);
+      console.log('Supabase insert result:', { data, error });
+
+      if (data) {
+        onUpdateVersions([...updatedVersions, data]);
+      } else if (error) {
+        console.error('Error inserting version:', error);
+        alert('创建版本失败: ' + error.message);
+      }
+    } catch (err) {
+      console.error('Exception in addVersion:', err);
+      alert('创建版本时发生错误');
     }
   };
 
@@ -116,7 +152,10 @@ export const VersionTree: React.FC<VersionTreeProps> = ({
           版本管理
         </h4>
         <button
-          onClick={addVersion}
+          onClick={() => {
+            console.log('New Version button clicked');
+            addVersion();
+          }}
           className="flex items-center gap-1 px-3 py-1.5 bg-deepblack text-sage-50 text-xs font-bold rounded-lg hover:bg-deepblack/90 transition-colors"
         >
           <Plus size={12} />

@@ -69,8 +69,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ project, onBack, onUpdateP
   }, [project.id]);
 
   const handleUpdateTrack = async (id: string, updates: Partial<Track>) => {
+    console.log('Updating track:', id, updates);
+    
     // 如果更新的是版本信息，需要特殊处理
     if (updates.versions !== undefined) {
+      console.log('Updating versions:', updates.versions);
       setTracks(prev => prev.map(t => t.id === id ? { ...t, versions: updates.versions || [] } : t));
       return;
     }
