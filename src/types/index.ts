@@ -8,6 +8,7 @@ export interface TrackVersion {
   audio_url?: string;     // MP3/WAV/FLAC file URL
   changes: string;      // What was modified in this version
   is_latest: boolean;     // Highlight this version
+  parent_id?: string;     // ID of the parent version
   created_at: string;
 }
 

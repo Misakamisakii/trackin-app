@@ -18,7 +18,7 @@ export const App = () => {
   const fetchProjects = async () => {
     const { data } = await supabase
       .from('projects')
-      .select('*')
+      .select('*, tracks(id)')
       .order('created_at', { ascending: false });
 
     if (data) {
@@ -30,7 +30,7 @@ export const App = () => {
         genre: p.genre || '',
         introduction: p.introduction || '',
         coverUrl: p.cover_url || '',
-        tracks: [] // Tracks are fetched independently in the Dashboard
+        tracks: p.tracks || [] // Initialize with basic track info to get the correct count
       })));
     }
   };

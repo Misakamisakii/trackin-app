@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Track, TrackStatus, Project } from '@/types';
 import { TrackList } from '@/components/dashboard/TrackList';
 import { ProductionBoard } from '@/components/dashboard/ProductionBoard';
-import { Disc3, ListMusic, Columns3, UserCircle, Settings, Info, Loader2 } from 'lucide-react';
+import { VersionView } from '@/components/dashboard/VersionView';
+import { Disc3, ListMusic, Columns3, UserCircle, Settings, Info, Loader2, Network } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { supabase } from '@/lib/supabase';
 
@@ -14,7 +15,7 @@ interface DashboardProps {
   onNavigateHome: () => void;
 }
 
-type TabType = 'list' | 'board';
+type TabType = 'list' | 'board' | 'version';
 
 export const Dashboard: React.FC<DashboardProps> = ({ project, onBack, onUpdateProject, onNavigateHome }) => {
   const [tracks, setTracks] = useState<Track[]>([]);
@@ -69,11 +70,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ project, onBack, onUpdateP
   }, [project.id]);
 
   const handleUpdateTrack = async (id: string, updates: Partial<Track>) => {
-    console.log('Updating track:', id, updates);
-    
     // 如果更新的是版本信息，需要特殊处理
     if (updates.versions !== undefined) {
-      console.log('Updating versions:', updates.versions);
       setTracks(prev => prev.map(t => t.id === id ? { ...t, versions: updates.versions || [] } : t));
       return;
     }
@@ -201,6 +199,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ project, onBack, onUpdateP
             >
               <Columns3 size={16} /> Progress
             </button>
+            <button 
+              onClick={() => setActiveTab('version')}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 text-sm font-bold rounded-xl transition-all",
+                activeTab === 'version' ? "bg-deepblack text-sage-50 shadow-md" : "text-sage-600 hover:bg-white/60"
+              )}
+            >
+              <Network size={16} /> Version
+            </button>
           </div>
           
           <div className="h-8 w-px bg-deepblack/10 mx-2"></div>
@@ -290,7 +297,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ project, onBack, onUpdateP
                 onReorderTracks={handleReorderTracks}
               />
             </motion.div>
-          ) : (
+          ) : activeTab === 'board' ? (
             <motion.div
               key="board"
               initial={{ opacity: 0, y: 20 }}
@@ -301,6 +308,19 @@ export const Dashboard: React.FC<DashboardProps> = ({ project, onBack, onUpdateP
               <ProductionBoard 
                 tracks={tracks} 
                 onUpdateTrackStatus={handleUpdateStatus} 
+              />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="version"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <VersionView 
+                tracks={tracks} 
+                onUpdateTrack={handleUpdateTrack} 
               />
             </motion.div>
           )}
